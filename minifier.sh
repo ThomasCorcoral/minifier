@@ -25,9 +25,6 @@ linefeed()
 	exit 0
 }
 
-
-
-
 # error_check goal is to tell the user his error and always invite him to use --help
 
 error_check()
@@ -37,7 +34,7 @@ error_check()
     1) echo "--help can only be used alone" ;;
     2) echo "Paths to the 'tags_file' must be specified";;
     3) echo "An argument can only appear once";;
-    4) echo "The option is not valid";;
+    4) echo "The option $2 is not valid";;
     esac
 
     echo "Enter \"./minifier.sh --help\" for more information."
@@ -54,7 +51,7 @@ check_args_valid()
     -v) echo "OK option -v" ;;
     -t) echo "OK option -t" ;;
     --css) echo "OK option --css" ;;
-    *) error_check 4
+    *) error_check 4 $1
     esac
     
     return 0
