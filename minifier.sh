@@ -19,6 +19,12 @@ help()
 	return 0
 }
 
+linefeed()
+{
+	tr '\n' [:space:] < essai.html > essaiFinal.html
+	exit 0
+}
+
 
 
 
