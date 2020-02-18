@@ -28,6 +28,7 @@ linefeed()
 
 
 
+
 # error_check goal is to tell the user his error and always invite him to use --help
 
 error_check()
