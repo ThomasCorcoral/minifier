@@ -1,5 +1,27 @@
 #!/bin/dash
 
+help()
+{
+    if test $1 = "--help" ; then
+		echo "usage : ./minifier.sh [OPTION]... dir_source dir_dest \n"
+		echo "Minifies HTML and/or CSS files with : "
+		echo "\tdir_source\tpath to the root directory of the website to be minified"
+		echo "\tdir_dest\tpath to the root directory of the minified website"
+		echo "OPTIONS"
+		echo "\t--help\t\tshow help and exit"
+		echo "\t-v\t\tdisplays the list of minified files; and for each\n\t\t\tfile, its final and initial sizes, and its reduction\n\t\t\tpercentage"
+		echo "\t-f\t\tif the dir_dest file exists, its content is\n\t\t\tremoved without asking for confirmation of deletion"
+		echo "\t--css\t\tCSS files are minified"
+		echo "\t--html\t\tHTML files are minified if none of the 2 previous options is present, the HTML and CSSfiles are minified\n"
+		echo "\t-t tags_file the "white space" characters preceding and following thetags (opening or closing) listed in the ’tags_file’ are deleted"
+	fi
+
+	return 0
+}
+
+
+
+
 # error_check goal is to tell the user his error and always invite him to use --help
 
 error_check()
