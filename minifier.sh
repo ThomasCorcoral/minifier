@@ -25,6 +25,12 @@ linefeed()
 	exit 0
 }
 
+espaceblanc()
+{
+	tr -s '[:space:]' ' ' < essai2.html > essaiFinal2.html
+	exit 0
+}
+
 # error_check goal is to tell the user his error and always invite him to use --help
 
 error_check()
