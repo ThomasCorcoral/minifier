@@ -19,6 +19,8 @@ help()
 	return 0
 }
 
+# Partie 2 : HTML
+
 linefeed()
 {
 	tr '\n' [:space:] < essai.html > essaiFinal.html
@@ -27,7 +29,21 @@ linefeed()
 
 espaceblanc()
 {
-	tr -s '[:space:]' ' ' < essai2.html > essaiFinal2.html
+	tr -s '[:space:]' ' ' < essai.html > essaiFinal2.html
+	exit 0
+}
+
+enlevercommentairehtml ()
+{
+	sed '/<!--/,/-->/g' essai.html > essaiFinal3.html
+	exit 0
+}
+
+# Partie 3 : CSS
+
+enlevercommentairecss ()
+{
+	sed '//*/,/*//g' essai2.css > essaiFinal4.css
 	exit 0
 }
 
