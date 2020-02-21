@@ -43,7 +43,7 @@ enlevercommentairehtml ()
 
 enlevercommentairecss ()
 {
-	sed '//*/,/*//g' < essai2.css > essaiFinal4.css
+	
 	exit 0
 }
 
