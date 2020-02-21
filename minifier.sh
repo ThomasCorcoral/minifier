@@ -35,7 +35,7 @@ espaceblanc()
 
 enlevercommentairehtml ()
 {
-	sed '/<!--/,/-->/g' essai.html > essaiFinal3.html
+	sed '/<!--/,/-->/g' < essai.html > essaiFinal3.html
 	exit 0
 }
 
@@ -43,7 +43,7 @@ enlevercommentairehtml ()
 
 enlevercommentairecss ()
 {
-	sed '//*/,/*//g' essai2.css > essaiFinal4.css
+	sed '//*/,/*//g' < essai2.css > essaiFinal4.css
 	exit 0
 }
 
