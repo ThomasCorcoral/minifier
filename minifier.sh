@@ -21,13 +21,13 @@ help()
 
 # Partie 2 : HTML
 
-linefeed()
+linefeedhtml()
 {
-	tr '\n' [:space:] < essai.html > essaiFinal.html
+	tr -s '\n' < essai.html > essaiFinal.html
 	exit 0
 }
 
-espaceblanc()
+espaceblanchtml()
 {
 	tr -s '[:space:]' ' ' < essai.html > essaiFinal2.html
 	exit 0
@@ -41,9 +41,16 @@ enlevercommentairehtml ()
 
 # Partie 3 : CSS
 
-enlevercommentairecss ()
+linefeedcss()
 {
-	
+	tr -s '\n' < essai2.css > essaiFinal4.css
+	exit 0
+}
+
+espaceblanccss()
+{
+	sed s/', '/'\,'/g < essai2.css > essaiFinal5.css
+
 	exit 0
 }
 
