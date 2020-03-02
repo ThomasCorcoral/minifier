@@ -93,7 +93,6 @@ check_args_valid()
 
 check_args_nb()
 {
-
     local check_order=0; # Add +1 when find a directory
     local was_t_before=0; # Put at 1 when the option -t was just before (and normaly it's a file)
     local dir_okay=0;
@@ -176,22 +175,7 @@ check_help()
     fi
 }
 
-test_t()
-{
-    if test $1 = "-t";
-    then
-        if test $# -eq 2 -a -f $2 -a -e $2 -a -r $2;
-        then
-            tags_file $2
-            exit 0
-        else
-            error_check 2
-            exit 1
-        fi
-    fi
-}
-
-check_all_needed()
+check_all_needed() # Check if both directories are ok
 {
     if test "$origin_directory" = "";
     then
@@ -208,7 +192,7 @@ check_all_needed()
     return 0
 }
 
-check_destination()
+check_destination() # Check if the destination is ok
 {
     if test "$destination_directory" = "$origin_directory";
     then
@@ -233,7 +217,7 @@ check_destination()
     return 0
 }
 
-html_css_check()
+html_css_check() # The aim is to minify only the selected file types
 {
     if test $html -eq 0 -a $css -eq 1;
     then
@@ -249,7 +233,7 @@ html_css_check()
 ##################### COPY FUNCTION ######################
 ##########################################################
 
-copy_all_files()
+copy_all_files() # Recursive function that copies files
 {
     mkdir "$2"
     for each_content in $(ls $1);
@@ -306,21 +290,21 @@ linefeed_css()
     mv $destination_directory/temp.css $1   # change the name and the place of the temporary file to replace the original one
 }
 
-unuse_space_css()
+unuse_space_css()   # remove the useless spaces
 {
 	sed s/', '/'\,'/g < $1 > $destination_directory/temp.css
     rm $1
     mv $destination_directory/temp.css $1
 }
 
-remove_comment_css ()
+remove_comment_css () # Remove the comment of the css file
 {
 	sed 's/\/\*[^/]*\*\///g' < $1 > $destination_directory/temp.css
     rm $1
     mv $destination_directory/temp.css $1
 }
 
-remove_space_css ()
+remove_space_css () # Remove the unuse spaces after {, after : and after ;
 {
     sed s/'{[ ]*'/'{'/g < $1 > $destination_directory/temp.html
     rm $1
