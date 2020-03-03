@@ -206,7 +206,7 @@ check_destination() # Check if the destination is ok
         else
             echo -n "$destination_directory already exist, do you really want to delete it ? ____ "
             read user_val
-            if test "$user_val" = "oui" -o "$user_val" = "yes";
+            if test "$user_val" = "oui" -o "$user_val" = "yes" -o "$user_val" = "y" -o "$user_val" = "o";
             then
                 rm -r $destination_directory
             else
@@ -299,7 +299,10 @@ unuse_space_css()   # remove the useless spaces
 
 remove_comment_css () # Remove the comment of the css file
 {
-	sed 's/\/\*[^/]*\*\///g' < $1 > $destination_directory/temp.css
+	# sed 's/\/\*[^/]*\*\///g' < $1 > $destination_directory/temp.css
+    # rm $1
+    # mv $destination_directory/temp.css $1
+    perl -pe 's|\/\*(.*?)\*\/||g' < $1 > $destination_directory/temp.css
     rm $1
     mv $destination_directory/temp.css $1
 }
@@ -315,6 +318,34 @@ remove_space_css () # Remove the unuse spaces after {, after : and after ;
     sed s/';[ ]*'/';'/g < $1 > $destination_directory/temp.html
     rm $1
     mv $destination_directory/temp.html $1
+    sed s/'[ ]*{'/'{'/g < $1 > $destination_directory/temp.html
+    rm $1
+    mv $destination_directory/temp.html $1
+    sed s/'[ ]*>[ ]*'/'>'/g < $1 > $destination_directory/temp.html
+    rm $1
+    mv $destination_directory/temp.html $1
+    sed s/')[ ]*'/'('/g < $1 > $destination_directory/temp.html
+    rm $1
+    mv $destination_directory/temp.html $1
+}
+
+remove_tab_css () # Remove the unuse spaces after {, after : and after ;
+{
+    sed s/'{[\t]*'/'{'/g < $1 > $destination_directory/temp.html
+    rm $1
+    mv $destination_directory/temp.html $1
+    sed s/':[\t]*'/':'/g < $1 > $destination_directory/temp.html
+    rm $1
+    mv $destination_directory/temp.html $1
+    sed s/';[\t]*'/';'/g < $1 > $destination_directory/temp.html
+    rm $1
+    mv $destination_directory/temp.html $1
+}
+tabfeed_css()
+{
+	tr -d '\t' < $1 > $destination_directory/temp.css # Delete the \n in the file and put the result in a temporary file
+    rm $1   # Delete the original file
+    mv $destination_directory/temp.css $1   # change the name and the place of the temporary file to replace the original one
 }
 
 ############################################################
@@ -347,6 +378,7 @@ minify_css() # Function which minify the css file
     unuse_space_css $1
     remove_comment_css $1
     remove_space_css $1
+    tabfeed_css $1
     
     local final_size=$(ls -l $1 | cut -f5 -d' ')
     if test $origin_size -eq 0;
