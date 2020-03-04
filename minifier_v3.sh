@@ -18,6 +18,9 @@ t_file_content="";
 ##################### HELP FUNCTION #######################
 ###########################################################
 
+# The parameter $1 of the help function is normaly the option --help. This is a double verification
+# system. She juste normaly print with some echo the help for the user. 
+
 help()
 {
     if test $1 = "--help" ; then
@@ -33,7 +36,8 @@ help()
 		echo "\t--html\t\tHTML files are minified if none of the 2 previous options is present, the HTML and CSSfiles are minified\n"
 		echo "\t-t tags_file the "white space" characters preceding and following thetags (opening or closing) listed in the ’tags_file’ are deleted"
 	fi
-
+	
+	exit 0
 	return 0
 }
 
@@ -42,6 +46,7 @@ help()
 ###########################################################
 
 # error_check goal is to tell the user his error and always invite him to use --help
+# She only needs one argument $1 which is the error number. It aims to echo the good error message
 
 error_check()
 {
@@ -71,10 +76,13 @@ error_check()
 ############## ALL CHECK AND TEST FUNCTION ###############
 ##########################################################
 
+# This function is made to increment the correct variable. The argument $1 is the option.
+# If the option isn't good, the user will see the correct error message through out the error_check function
+
 check_args_valid()
 {
     case $1 in
-    --help) echo "OK option --help" ;;
+    --help) help ;;
     --html) html=$(($html+1)) 
         return $html ;;
     -f) f=$(($f+1)) 
@@ -90,6 +98,9 @@ check_args_valid()
     
     return 0
 }
+
+# This function take all the arguments that the user put when he wrote the function
+# and then she looks at all of them and check each one.
 
 check_args_nb()
 {
@@ -161,21 +172,9 @@ check_args_nb()
     return 0
 }
 
-check_help()
-{
-    if test $1 = "--help";    #Check if the user correctly used --help 
-    then
-        if test $# = 1;
-        then
-            help $1
-            exit 0
-        else
-            error_check 1
-        fi
-    fi
-}
+# Check if both directories are ok, no arguments needed
 
-check_all_needed() # Check if both directories are ok
+check_all_needed() 
 {
     if test "$origin_directory" = "";
     then
@@ -192,7 +191,9 @@ check_all_needed() # Check if both directories are ok
     return 0
 }
 
-check_destination() # Check if the destination is ok
+# Check if the destination is ok, no argument needed
+
+check_destination()
 {
     if test "$destination_directory" = "$origin_directory";
     then
@@ -217,7 +218,9 @@ check_destination() # Check if the destination is ok
     return 0
 }
 
-html_css_check() # The aim is to minify only the selected file types
+# The aim is to minify only the selected file types, no arguments needed
+
+html_css_check()
 {
     if test $html -eq 0 -a $css -eq 1;
     then
@@ -233,7 +236,10 @@ html_css_check() # The aim is to minify only the selected file types
 ##################### COPY FUNCTION ######################
 ##########################################################
 
-copy_all_files() # Recursive function that copies files
+ # Recursive function that copies files, the arguments arge, the original directory ($1) 
+ # and the destination directory ($2)
+
+copy_all_files()
 {
     mkdir "$2"
     for each_content in $(ls $1);
@@ -251,12 +257,16 @@ copy_all_files() # Recursive function that copies files
 ########################## HTML ##########################
 ##########################################################
 
+# Delete the \n in the file, the argument is the file path
+
 linefeed_html()
 {
 	tr -s '\n' < $1 > $destination_directory/temp.html # Delete the \n in the file and put the result in a temporary file
     rm $1   # Delete the original file
     mv $destination_directory/temp.html $1  # change the name and the place of the temporary file to replace the original one
 }
+
+# Replace the consecutives spaces by only one space in the file, the argument is the file path
 
 unuse_space_html()  # Delete the useless spaces
 {
@@ -265,12 +275,16 @@ unuse_space_html()  # Delete the useless spaces
     mv $destination_directory/temp.html $1
 }
 
+# Remove the comment in the file, the argument is the file path
+
 remove_comment_html ()
 {
 	sed 's/<!--[^>]*>//g' < $1 > $destination_directory/temp.html # /!\ [^>] is important because if not put, the pattern take from the first to the last comment
     rm $1
     mv $destination_directory/temp.html $1
 }
+
+# Put all the tags to lower cases in the file, the argument is the file path
 
 put_lo_tags ()  # The aim of this function is to put all the tags to lower case. To compare with tags in the t-file
 {
@@ -283,12 +297,16 @@ put_lo_tags ()  # The aim of this function is to put all the tags to lower case.
 ########################### CSS ###########################
 ###########################################################
 
+# Same as the html one
+
 linefeed_css()
 {
 	tr -d '\n' < $1 > $destination_directory/temp.css # Delete the \n in the file and put the result in a temporary file
     rm $1   # Delete the original file
     mv $destination_directory/temp.css $1   # change the name and the place of the temporary file to replace the original one
 }
+
+# Same as the html one
 
 unuse_space_css()   # remove the useless spaces
 {
@@ -297,15 +315,16 @@ unuse_space_css()   # remove the useless spaces
     mv $destination_directory/temp.css $1
 }
 
+# Same as the html one
+
 remove_comment_css () # Remove the comment of the css file
 {
-	# sed 's/\/\*[^/]*\*\///g' < $1 > $destination_directory/temp.css
-    # rm $1
-    # mv $destination_directory/temp.css $1
     perl -pe 's|\/\*(.*?)\*\/||g' < $1 > $destination_directory/temp.css
     rm $1
     mv $destination_directory/temp.css $1
 }
+
+# Remove all differents types of unuse spaces that do not change the file execution
 
 remove_space_css () # Remove the unuse spaces after {, after : and after ;
 {
@@ -329,18 +348,8 @@ remove_space_css () # Remove the unuse spaces after {, after : and after ;
     mv $destination_directory/temp.html $1
 }
 
-remove_tab_css () # Remove the unuse spaces after {, after : and after ;
-{
-    sed s/'{[\t]*'/'{'/g < $1 > $destination_directory/temp.html
-    rm $1
-    mv $destination_directory/temp.html $1
-    sed s/':[\t]*'/':'/g < $1 > $destination_directory/temp.html
-    rm $1
-    mv $destination_directory/temp.html $1
-    sed s/';[\t]*'/';'/g < $1 > $destination_directory/temp.html
-    rm $1
-    mv $destination_directory/temp.html $1
-}
+# Remove the tab from the file
+
 tabfeed_css()
 {
 	tr -d '\t' < $1 > $destination_directory/temp.css # Delete the \n in the file and put the result in a temporary file
@@ -351,6 +360,9 @@ tabfeed_css()
 ############################################################
 ################### APPLICATION OF T FILE ##################
 ############################################################
+
+# This function execute the t option by clearing the spaces before and after the tags contained in
+# the "t-file", the argument is the file (.html)
 
 apply_t_file ()
 {
@@ -370,7 +382,10 @@ apply_t_file ()
 ##################### MINIFY FUNCTION #####################
 ###########################################################
 
-minify_css() # Function which minify the css file
+# Function which minify the css file, the function uses all the function we wrote before,
+# the only argument is the file path
+
+minify_css()
 {
     local origin_size=$(ls -l $1 | cut -f5 -d' ')
 
@@ -395,7 +410,10 @@ minify_css() # Function which minify the css file
     return 0
 }
 
-minify_html() # Function which minify the html file
+# Function which minify the hmtl file, the function uses all the function we wrote before,
+# the only argument is the file path
+
+minify_html() 
 {
     local origin_size=$(ls -l $1 | cut -f5 -d' ')
 
@@ -424,7 +442,9 @@ minify_html() # Function which minify the html file
     return 0
 }
 
-minify_dest() # Function that browse the directory to minify files
+ # Function that browse the directory to minify files, she cares about the options --css and --hmtl 
+
+minify_dest()
 {
     for search in $(ls $1);
     do
@@ -454,6 +474,9 @@ minify_dest() # Function that browse the directory to minify files
 ##########################################################
 ######################## PRINTER #########################
 ##########################################################
+
+# We decided to leave this function here because she is usefull when you want to do some
+# tests and see the options the user used
 
 print_get()
 {
@@ -486,6 +509,8 @@ print_get()
 ########################## MAIN ##########################
 ##########################################################
 
+# Main function which will call all the other, the argument is $@ (so all)
+
 main()
 {
     check_args_nb $@
@@ -511,4 +536,4 @@ main()
 }
 
 
-main $@
+main $@ # call of the main function
