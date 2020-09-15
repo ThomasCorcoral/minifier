@@ -13,10 +13,10 @@ Ce projet a été intégralement réalisé en Dash
 
 #### Etape 1
 
-Téléchargez le start.jar
+Téléchargez le script minifier.sh puis allez dans le dossier
 
 #### Etape 2
-Rendez vous dans le dossier concerné
+Changez les permissions (chmod +x ./minifier.sh
 
 #### Etape 3
-Lancez le fichier (java -jar Start.jar)
+Lancez le script ./minifier (dossier d'origine) (dossier destination)
