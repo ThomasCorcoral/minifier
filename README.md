@@ -1,22 +1,23 @@
-## Quel est ce projet ?
-Un minifier est un programme qui permet de condenser un fichier. Celui-ci permet de condenser un fichier html ou css. Le but de condenser un fichier de ce type est de prendre moins de place sur le serveur et être charger plus rapidement.
+## What is this project?
+
+A minifier is a program that condenses a file. It condenses an html or css file. The goal of condensed a file of this type is to take up less space on the server and be loaded faster.
 
 ## Demo
 
 ![Preview](https://github.com/ThomasCorcoral/minifier/blob/master/minifier.png)
 
-## Comment a-t-il été réalisé ?
+## How was it done?
 
-Ce projet a été intégralement réalisé en Dash 
+This project was entirely carried out in Dash
 
-## Guide d'installation
+## Installation Guide
 
-#### Etape 1
+#### Step 1
 
-Téléchargez le script minifier.sh puis allez dans le dossier
+Download the minifier.sh script and go to the folder
 
-#### Etape 2
-Changez les permissions (chmod +x ./minifier.sh
+##### Step 2
+Change permissions (chmod +x . /minifier.sh
 
-#### Etape 3
-Lancez le script ./minifier (dossier d'origine) (dossier destination)
+##### Step 3
+Run the script . /minifier (original folder) (destination folder)
